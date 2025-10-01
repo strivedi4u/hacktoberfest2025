@@ -1,0 +1,32 @@
+import speech_recognition as sr
+import whisper
+
+# Initialize recognizer and Whisper model
+recognizer = sr.Recognizer()
+model = whisper.load_model("tiny")  # Use 'tiny' for faster processing
+
+def transcribe_audio():
+    with sr.Microphone() as source:
+        print("Recording for 10 seconds...")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source, timeout=10, phrase_time_limit=10)
+        # Save audio temporarily for Whisper
+        with open("temp.wav", "wb") as f:
+            f.write(audio.get_wav_data())
+        result = model.transcribe("temp.wav")
+        return result["text"]
+
+def main():
+    print("Start speaking for transcription. Say 'stop' to exit.")
+    while True:
+        try:
+            text = transcribe_audio()
+            print(f"Transcription: {text}")
+            if "stop" in text.lower():
+                print("Stopping transcription.")
+                break
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
