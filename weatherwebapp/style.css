@@ -1,0 +1,72 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* Light cyan background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px; /* Fixed width for better alignment */
+}
+
+/* Header Styles */
+h1 {
+    color: #00796b; /* Teal color for header */
+    margin-bottom: 20px;
+}
+
+/* Input and Button Styles */
+input {
+    padding: 10px;
+    width: calc(100% - 22px); /* Full width minus padding */
+    border: 2px solid #00796b; /* Teal border */
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #004d40; /* Darker teal on focus */
+}
+
+button {
+    padding: 10px;
+    margin-top: 10px; /* Space between input and button */
+    background-color: #00796b; /* Teal background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #004d40; /* Darker teal on hover */
+}
+
+/* Weather Info Styles */
+#weather-info {
+    margin-top: 20px;
+}
+
+#weather-info h2 {
+    color: #004d40; /* Darker teal for city name */
+}
+
+#weather-info p {
+    margin: 5px 0; /* Space between paragraphs */
+}
+
+/* Error Message Styles */
+.text-danger {
+    color: red; /* Red color for error messages */
+}
