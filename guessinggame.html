@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <!-- Load Tailwind CSS via CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font and general styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Game Container -->
+    <div id="game-container" class="w-full max-w-md mx-auto p-6 bg-white shadow-2xl rounded-xl border-t-4 border-indigo-600 transition-all duration-300 transform scale-100">
+        
+        <h1 class="text-3xl font-extrabold text-gray-800 text-center mb-4">
+            Guess the Number 🔮
+        </h1>
+        <p class="text-center text-sm text-gray-500 mb-6">
+            I'm thinking of a number between 1 and 100. You have <span id="guesses-left" class="font-bold text-indigo-600">7</span> guesses.
+        </p>
+
+        <!-- Input and Guess Button -->
+        <div class="flex space-x-3 mb-6">
+            <input type="number" id="guess-input" min="1" max="100" placeholder="Enter your guess"
+                   class="flex-grow p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 transition duration-150"
+                   onkeydown="if(event.keyCode===13) document.getElementById('guess-button').click();">
+            
+            <button id="guess-button" onclick="handleGuess()"
+                    class="px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 active:scale-95 disabled:opacity-50">
+                Guess
+            </button>
+        </div>
+
+        <!-- Feedback Message Area -->
+        <div id="feedback-message" class="text-center text-lg font-semibold h-8 mb-4">
+            <!-- Game feedback (Too high, Too low, Win/Loss) appears here -->
+        </div>
+
+        <!-- Guesses History -->
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+            <p class="font-medium text-gray-700 mb-2">Your Past Guesses:</p>
+            <div id="guess-history" class="text-gray-600 text-sm italic min-h-[20px]">
+                —
+            </div>
+        </div>
+
+        <!-- New Game Button (Hidden initially) -->
+        <button id="new-game-button" onclick="startGame()"
+                class="w-full mt-6 py-3 bg-green-500 text-white font-bold rounded-lg shadow-lg hover:bg-green-600 transition duration-150 active:scale-95 hidden">
+            Start New Game
+        </button>
+
+    </div>
+
+    <script>
+        // --- Game State Variables ---
+        let targetNumber;
+        let guessesRemaining;
+        let gameOver;
+        let guessedNumbers;
+
+        // --- DOM Elements ---
+        const guessInput = document.getElementById('guess-input');
+        const guessButton = document.getElementById('guess-button');
+        const newGameButton = document.getElementById('new-game-button');
+        const guessesLeftSpan = document.getElementById('guesses-left');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const guessHistoryDiv = document.getElementById('guess-history');
+
+        // Function to initialize or reset the game
+        function startGame() {
+            // 1. Reset State
+            targetNumber = Math.floor(Math.random() * 100) + 1; // Number between 1 and 100
+            guessesRemaining = 7;
+            gameOver = false;
+            guessedNumbers = [];
+
+            // 2. Update UI
+            guessesLeftSpan.textContent = guessesRemaining;
+            feedbackMessage.textContent = "Start guessing!";
+            feedbackMessage.className = "text-center text-lg font-semibold h-8 mb-4 text-gray-500";
+            guessHistoryDiv.textContent = "—";
+            
+            guessInput.value = '';
+            guessInput.disabled = false;
+            guessButton.disabled = false;
+            newGameButton.classList.add('hidden');
+            
+            console.log("New Game Started. Target is: " + targetNumber); // For testing
+        }
+
+        // Function to handle the user's guess submission
+        function handleGuess() {
+            if (gameOver) return;
+
+            const guess = parseInt(guessInput.value);
+
+            // 1. Input Validation
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                displayFeedback("Please enter a number between 1 and 100.", "text-yellow-600");
+                return;
+            }
+            if (guessedNumbers.includes(guess)) {
+                displayFeedback(`You already guessed ${guess}. Try a different number.`, "text-yellow-600");
+                return;
+            }
+
+            // 2. Update Game State
+            guessesRemaining--;
+            guessedNumbers.push(guess);
+            
+            // 3. Provide Feedback
+            if (guess === targetNumber) {
+                winGame(guess);
+            } else if (guessesRemaining === 0) {
+                loseGame();
+            } else {
+                updateGuesses(guess);
+            }
+
+            // 4. Reset Input
+            guessInput.value = '';
+            guessesLeftSpan.textContent = guessesRemaining;
+        }
+
+        // Function to update the feedback message
+        function displayFeedback(message, colorClass) {
+            feedbackMessage.textContent = message;
+            feedbackMessage.className = `text-center text-lg font-semibold h-8 mb-4 ${colorClass}`;
+        }
+
+        // Function called when a guess is incorrect but the game continues
+        function updateGuesses(guess) {
+            let message;
+            let color;
+            if (guess < targetNumber) {
+                message = "Too Low! Guess Higher. ⬆️";
+                color = "text-red-500";
+            } else {
+                message = "Too High! Guess Lower. ⬇️";
+                color = "text-red-500";
+            }
+            
+            displayFeedback(message, color);
+            guessHistoryDiv.textContent = guessedNumbers.join(', ');
+        }
+
+        // Function called when the user wins
+        function winGame(finalGuess) {
+            gameOver = true;
+            displayFeedback(`🎉 Congratulations! You guessed the number ${finalGuess} in ${7 - guessesRemaining} tries!`, "text-green-600");
+            
+            guessInput.disabled = true;
+            guessButton.disabled = true;
+            newGameButton.classList.remove('hidden');
+            guessHistoryDiv.textContent = guessedNumbers.join(', ');
+        }
+
+        // Function called when the user loses
+        function loseGame() {
+            gameOver = true;
+            displayFeedback(`❌ Game Over! The number was ${targetNumber}. Better luck next time!`, "text-red-600");
+            
+            guessInput.disabled = true;
+            guessButton.disabled = true;
+            newGameButton.classList.remove('hidden');
+            guessHistoryDiv.textContent = guessedNumbers.join(', ');
+        }
+
+        // Initialize the game when the page loads
+        window.onload = startGame;
+    </script>
+
+</body>
+</html>
