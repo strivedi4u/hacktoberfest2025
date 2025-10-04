@@ -1,0 +1,13 @@
+d1,d2,d3 = map(int,input().split())
+
+
+if d1 + d2 <= d3:
+    distance = 2*(d1+d2)
+elif d1 + d3 <= d2:
+    distance = 2*(d1 + d3)
+elif d2 + d3 <= d1:
+    distance = 2*(d2+d3)
+else:
+    distance = (d1+d2+d3)
+
+print(distance)
