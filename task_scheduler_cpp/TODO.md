@@ -1,0 +1,5 @@
+- [x] Create earliest_time.h with Worker struct and function declaration
+- [x] Create earliest_time.cpp with earliestFinishTime implementation
+- [x] Modify main.cpp to add test cases for earliestFinishTime
+- [x] Compile the project
+- [x] Run and verify the scheduler and function work correctly
