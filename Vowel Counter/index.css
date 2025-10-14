@@ -1,0 +1,173 @@
+/* Global reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 20px;
+    background-color: #FAF3DD;
+    font-family: 'Times New Roman', Times, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 4%;
+    margin-top: 5%;
+    color: #333;
+}
+
+.largebox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.smallbox {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+textarea {
+    font-size: 1rem;
+    padding: 15px;
+    resize: none;
+    font-family: 'Times New Roman', Times, serif;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border: 2px solid #66afe9;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.5);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    width: 48%;
+    font-size: 1rem;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#click1 {
+    background-color: #f44336;
+}
+
+#click1:hover {
+    background-color: #d32f2f;
+}
+
+.output {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.output p {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+@media (max-width: 650px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .smallbox {
+        padding: 20px;
+    }
+
+    textarea {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 450px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    textarea {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    button {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+}
+@media (max-width: 250px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .smallbox {
+        padding: 10px;
+    }
+
+    textarea {
+        font-size: 0.7rem;
+        padding: 5px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+        font-size: 0.75rem;
+        padding: 6px;
+        margin-bottom: 10px;
+    }
+
+    .output p {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
