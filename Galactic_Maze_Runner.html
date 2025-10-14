@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Maze Runner</title>
+    <!-- Load Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <!-- Load Orbitron font for arcade look -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    </style>
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        'space-dark': '#0f172a', /* slate-900 */
+                        'runner-glow': '#a78bfa', /* violet-400 */
+                        'star-light': '#fef3c7', /* amber-100 */
+                        'path-safe': '#34d399', /* emerald-400 */
+                        'path-mine': '#f87171', /* red-400 */
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom Game CSS -->
+    <style>
+        /* Base styles for the "Galactic Runner" theme */
+        body {
+            background-color: #0f172a; 
+            color: #fef3c7; 
+            font-family: 'Orbitron', sans-serif;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Game Board specific styling for the grid container */
+        #game-board {
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.9) 50%, rgba(0, 0, 0, 0.7) 100%);
+            box-shadow: 0 0 30px rgba(167, 139, 250, 0.5); /* Glowing border */
+            border: 3px solid #a78bfa;
+            position: relative;
+            /* Ensure the grid is centered and square, max 500px wide */
+            width: min(90vw, 500px);
+            height: min(90vw, 500px);
+            margin: 1rem auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 4px; /* Grid spacing */
+        }
+
+        /* Individual grid cell styling */
+        .grid-cell {
+            background-color: rgba(30, 41, 59, 0.8); /* Dark slate base */
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.1s ease-out, box-shadow 0.1s ease-out;
+        }
+
+        /* State classes */
+        .safe-path {
+            background-color: #34d399; /* Green for safe path */
+            box-shadow: 0 0 15px #34d399;
+            animation: pulse-green 1s infinite alternate;
+        }
+
+        .correct-click {
+            background-color: #fcd34d; /* Yellow for correct hit */
+            box-shadow: 0 0 10px #fcd34d;
+        }
+
+        .mine-hit {
+            background-color: #f87171; /* Red for wrong hit */
+            box-shadow: 0 0 20px #f87171;
+            animation: shake 0.5s;
+        }
+
+        /* Keyframes */
+        @keyframes pulse-green {
+            from { opacity: 0.8; }
+            to { opacity: 1; box-shadow: 0 0 20px #34d399; }
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-1px, -2px) rotate(-1deg); }
+            40% { transform: translate(-3px, 0px) rotate(1deg); }
+            60% { transform: translate(1px, -1px) rotate(0deg); }
+            80% { transform: translate(-1px, 1px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* Button styling */
+        .game-button {
+            font-size: 1.25rem;
+            padding: 0.75rem 2rem;
+            cursor: pointer;
+            border: 2px solid #a78bfa;
+            background: #1f2937;
+            color: #a78bfa;
+            box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+            transition: all 0.15s ease-in-out;
+        }
+
+        .game-button:hover:not(:disabled) {
+            background: #a78bfa;
+            color: #0f172a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(167, 139, 250, 0.6);
+        }
+
+        .game-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .game-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="p-4 flex flex-col items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-4xl flex flex-col items-center">
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-runner-glow tracking-wider text-shadow-xl">
+            🧠 GALACTIC MAZE RUNNER 🚀
+        </h1>
+
+        <!-- Level and Timer Display -->
+        <div class="w-full max-w-[500px] flex justify-around text-xl sm:text-2xl font-mono p-4 rounded-lg bg-gray-800 border-2 border-gray-700 shadow-lg mb-4">
+            <span>LEVEL: <span id="level-display" class="text-path-safe">0</span></span>
+            <span>TIME: <span id="timer-display" class="text-path-mine">0</span>s</span>
+        </div>
+
+        <!-- Game Board Area (5x5 grid) -->
+        <div id="game-board" class="rounded-xl mx-auto">
+            <!-- Grid cells injected by JS -->
+        </div>
+        
+        <!-- Controls -->
+        <div class="flex space-x-4 mt-6">
+            <button id="start-button" class="game-button rounded-full">
+                Start Mission
+            </button>
+            <button id="stop-button" class="game-button rounded-full hidden bg-red-800 border-red-500 text-red-300 hover:bg-red-500 hover:text-white" disabled>
+                Stop Game
+            </button>
+        </div>
+
+        <!-- Game Over / Start Message Modal -->
+        <div id="message-modal" class="hidden fixed inset-0 bg-space-dark bg-opacity-90 z-20 items-center justify-center" onclick="hideMessage()">
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border-4 border-runner-glow max-w-md w-full mx-4" onclick="event.stopPropagation()">
+                <h2 id="modal-title" class="text-3xl font-bold mb-4 text-runner-glow">Welcome, Pilot!</h2>
+                <p id="modal-message" class="text-star-light mb-6 text-lg">Memorize the **Safe Path** when it lights up green, then click the cells in the exact sequence. Be fast—the clicking phase has a time limit!</p>
+                
+                <button class="game-button rounded-lg w-full" onclick="hideMessage()">Understood</button>
+            </div>
+        </div>
+
+        <!-- Signature/Credit -->
+        <p class="text-xs text-gray-500 mt-6 tracking-widest uppercase">
+            Code Signature: abhijat sarari
+        </p>
+    </div>
+
+    <!-- JavaScript Game Logic -->
+    <script>
+        // Global state variables
+        const GRID_SIZE = 5;
+        const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
+        const PATH_LENGTH = 5;
+
+        let currentLevel = 0;
+        let timeLeft = 0; 
+        let path = []; // Stores the indices (0-24) of the safe path
+        let playerPathIndex = 0; // Tracks the current step the player needs to click
+        let pathDisplayTime = 2000; // Time path is visible (ms)
+        let playerClickTimeLimit = 5000; // Time player has to complete the path (ms)
+        
+        let gameInterval;
+        let displayTimeout;
+        let isGameRunning = false;
+        let isClickingPhase = false;
+
+        // --- Tone.js Setup for simple arcade sounds ---
+        let successSynth, errorSynth;
+        
+        function initAudio() {
+            try {
+                if (!successSynth) {
+                    Tone.start();
+                    // Synth for success (correct click, level complete)
+                    successSynth = new Tone.Synth({
+                        oscillator: { type: "sine" },
+                        envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+                    }).toDestination();
+                    
+                    // Synth for errors (wrong click, game over)
+                    errorSynth = new Tone.NoiseSynth({
+                        noise: { type: 'white' },
+                        envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 }
+                    }).toDestination();
+                }
+            } catch (e) {
+                console.error("Tone.js failed to initialize:", e);
+            }
+        }
+
+        // Sound functions
+        function playCorrectSound() {
+            if (successSynth) {
+                successSynth.triggerAttackRelease("C5", "16n");
+            }
+        }
+
+        function playLevelCompleteSound() {
+            if (successSynth) {
+                successSynth.triggerAttackRelease(["C5", "E5", "G5"], "4n");
+            }
+        }
+
+        function playErrorSound() {
+            if (errorSynth) {
+                errorSynth.triggerAttackRelease("8n");
+            }
+        }
+
+        // --- Grid and Display Functions ---
+
+        function createGrid() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = ''; // Clear previous grid
+            for (let i = 0; i < TOTAL_CELLS; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.index = i;
+                cell.textContent = i + 1; // Display 1-25
+                cell.onclick = handleCellClick;
+                cell.ontouchstart = (e) => { e.preventDefault(); handleCellClick(e); };
+                board.appendChild(cell);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('level-display').textContent = currentLevel;
+            document.getElementById('timer-display').textContent = (timeLeft / 1000).toFixed(1);
+        }
+        
+        function resetCellStates() {
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                cell.classList.remove('safe-path', 'correct-click', 'mine-hit');
+                cell.style.pointerEvents = 'none'; // Disable clicking by default
+            });
+        }
+
+        // --- Path Generation and Display ---
+        
+        /** Generates a new random path of PATH_LENGTH, ensuring sequential cells are adjacent. */
+        function generatePath(startCellIndex) {
+            const newPath = [startCellIndex];
+            let current = startCellIndex;
+
+            for (let i = 1; i < PATH_LENGTH; i++) {
+                const neighbors = [];
+                const row = Math.floor(current / GRID_SIZE);
+                const col = current % GRID_SIZE;
+
+                // Check top neighbor
+                if (row > 0) neighbors.push(current - GRID_SIZE);
+                // Check bottom neighbor
+                if (row < GRID_SIZE - 1) neighbors.push(current + GRID_SIZE);
+                // Check left neighbor
+                if (col > 0) neighbors.push(current - 1);
+                // Check right neighbor
+                if (col < GRID_SIZE - 1) neighbors.push(current + 1);
+
+                // Filter out neighbors already in the path
+                const availableNeighbors = neighbors.filter(n => !newPath.includes(n));
+
+                if (availableNeighbors.length === 0) {
+                    // Dead end, restart path generation
+                    return generatePath(Math.floor(Math.random() * TOTAL_CELLS)); 
+                }
+
+                current = availableNeighbors[Math.floor(Math.random() * availableNeighbors.length)];
+                newPath.push(current);
+            }
+            return newPath;
+        }
+
+        function startLevel() {
+            if (!isGameRunning) return;
+
+            resetCellStates();
+            currentLevel++;
+            playerPathIndex = 0;
+            isClickingPhase = false;
+            
+            // Generate a path starting from a random cell
+            path = generatePath(Math.floor(Math.random() * TOTAL_CELLS));
+            
+            // Set initial timer for path display phase (no time limit needed here)
+            timeLeft = pathDisplayTime;
+
+            // Update button text to indicate memory phase
+            document.getElementById('start-button').textContent = `MEMORIZE (Level ${currentLevel})`;
+            document.getElementById('start-button').disabled = true;
+
+            // 1. SHOW PATH
+            document.querySelectorAll('.grid-cell').forEach((cell, index) => {
+                if (path.includes(index)) {
+                    cell.classList.add('safe-path');
+                    // Add the sequence number to the cell for help
+                    cell.textContent = path.indexOf(index) + 1;
+                }
+            });
+
+            // 2. WAIT, THEN START CLICKING PHASE
+            displayTimeout = setTimeout(() => {
+                // Remove visual cues and reset text
+                resetCellStates();
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    cell.textContent = '';
+                    cell.style.pointerEvents = 'auto'; // Enable clicking
+                });
+
+                isClickingPhase = true;
+                
+                // Set the click time limit and start the countdown
+                timeLeft = playerClickTimeLimit;
+                document.getElementById('start-button').textContent = `Click!`;
+                
+                // Start the timer interval
+                if (gameInterval) clearInterval(gameInterval);
+                gameInterval = setInterval(countdownTimer, 100); 
+
+            }, pathDisplayTime);
+
+            updateDisplay();
+        }
+
+        function countdownTimer() {
+            if (!isClickingPhase) return;
+
+            timeLeft -= 100;
+            if (timeLeft <= 0) {
+                timeLeft = 0;
+                updateDisplay();
+                endGame("TIME OUT!", `You ran out of time to complete the path! Final Level: ${currentLevel - 1}`);
+                return;
+            }
+            updateDisplay();
+        }
+
+        function handleCellClick(event) {
+            if (!isGameRunning || !isClickingPhase) return;
+            
+            const clickedIndex = parseInt(event.currentTarget.dataset.index);
+            const expectedIndex = path[playerPathIndex];
+            const cell = event.currentTarget;
+
+            // 1. Correct Click
+            if (clickedIndex === expectedIndex) {
+                playCorrectSound();
+                
+                // Mark cell as correctly clicked
+                cell.classList.add('correct-click');
+                cell.style.pointerEvents = 'none'; // Prevent re-clicking
+                
+                playerPathIndex++;
+
+                // 2. Path Complete
+                if (playerPathIndex === PATH_LENGTH) {
+                    playLevelCompleteSound();
+                    
+                    // Increase difficulty before starting next level
+                    pathDisplayTime = Math.max(500, pathDisplayTime - 100); // Path visible for less time
+                    playerClickTimeLimit = Math.max(2500, playerClickTimeLimit - 100); // Less time to click
+                    
+                    setTimeout(startLevel, 1000); // Start next level after 1 second pause
+                }
+            } 
+            // 3. Incorrect Click (Mine Hit)
+            else {
+                playErrorSound();
+                cell.classList.add('mine-hit');
+                endGame("CRITICAL ERROR!", `Wrong cell clicked! You hit a mine. Final Level: ${currentLevel - 1}`);
+            }
+        }
+
+
+        // --- Message Modal Functions ---
+
+        function showMessage(title, message) {
+            const modal = document.getElementById('message-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideMessage() {
+            const modal = document.getElementById('message-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        
+        // --- Game Flow Functions ---
+
+        function endGame(title, message) {
+            if (!isGameRunning) return;
+
+            isGameRunning = false;
+            isClickingPhase = false;
+            
+            // Clear all intervals and timeouts
+            if (gameInterval) clearInterval(gameInterval);
+            if (displayTimeout) clearTimeout(displayTimeout);
+
+            // Disable cell interaction
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                cell.style.pointerEvents = 'none';
+            });
+            
+            showMessage(title, message);
+
+            // Update Start/Stop buttons
+            document.getElementById('start-button').textContent = "Restart Mission";
+            document.getElementById('start-button').disabled = false;
+            document.getElementById('stop-button').classList.add('hidden');
+            document.getElementById('stop-button').disabled = true;
+        }
+
+        function startGame() {
+            // Initialize audio on first click interaction
+            initAudio();
+
+            // Reset state
+            currentLevel = 0;
+            pathDisplayTime = 2000;
+            playerClickTimeLimit = 5000;
+            isGameRunning = true;
+            updateDisplay();
+            hideMessage();
+            
+            // Update Start/Stop buttons
+            document.getElementById('stop-button').classList.remove('hidden');
+            document.getElementById('stop-button').disabled = false;
+
+            // Start the first level
+            startLevel();
+        }
+
+        // --- Event Listeners and Initial Setup ---
+
+        window.onload = function() {
+            createGrid();
+            // Attach the start game function to the button
+            document.getElementById('start-button').addEventListener('click', startGame);
+            
+            // Attach the stop game function to the button (it calls endGame)
+            document.getElementById('stop-button').addEventListener('click', () => endGame("MISSION ABORTED", `You manually aborted the mission. Final Level: ${currentLevel - 1}`));
+            
+            // Show initial message
+            showMessage("Welcome, Pilot!", "Memorize the Safe Path when it lights up green, then click the cells in the exact sequence. Be fast—the clicking phase has a time limit!");
+        };
+    </script>
+</body>
+</html>
