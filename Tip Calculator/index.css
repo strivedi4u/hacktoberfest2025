@@ -1,0 +1,134 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: #2c3e50;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin: 2% 0%;
+    font-size: 300%;
+}
+
+.box {
+    background-color: white;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid black;
+    box-shadow: 5px 5px 5px black;
+}
+
+label {
+    font-size: x-large;
+    margin-bottom: 20%;
+}
+
+.input1,
+.input2,
+.input3 {
+    margin-bottom: 20px;
+}
+
+.box1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    padding: 5px;
+    width: 80%;
+    margin-top: 5%;
+    font-size: large;
+}
+
+select {
+    padding: 5px;
+    margin-top: 5%;
+    font-size: large;
+}
+
+button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: larger;
+    border-radius: 5px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.output {
+    margin-top: 2%;
+}
+
+.output p {
+    text-align: center;
+    font-size: x-large;
+}
+
+@media(max-width:450px) {
+    h1 {
+        font-size: 200%;
+        margin: 5% 0%;
+    }
+
+    label {
+        font-size: large;
+    }
+
+    input {
+        padding: 2px;
+        font-size: medium;
+    }
+
+    button {
+        font-size: large;
+    }
+
+    .output {
+        margin-top: 4%;
+    }
+
+    .output p {
+        font-size: large;
+    }
+
+    .box {
+        padding: 10px;
+    }
+}
+
+@media(max-width:215px) {
+    h1 {
+        font-size: 150%;
+    }
+
+    .output p {
+        font-size: medium;
+    }
+
+    label {
+        font-size: medium;
+    }
+
+    input {
+        padding: 2px;
+        font-size: small;
+    }
+
+    button {
+        font-size: medium;
+    }
+}
