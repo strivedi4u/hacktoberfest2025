@@ -1,0 +1,37 @@
+🧾 Description — Search Word in Files
+
+The Search Word in Files script is a simple yet powerful Python utility that helps you quickly find where a specific word or keyword appears within a project directory. It scans all files (including subfolders) and shows the file name, line number, and line content where the match occurs.
+
+🔧 Use Case
+
+Useful for developers who want to locate a function, variable, or keyword in large projects.
+
+Ideal for text analysts or content editors who need to find terms inside hundreds of files.
+
+Works great for debugging, documentation search, or code review automation.
+
+⚙️ Features
+
+Searches recursively through all subdirectories.
+
+Supports multiple file types (.py, .txt, .md, .log, etc.).
+
+Case-insensitive matching (finds both Function and function).
+
+Automatically skips unreadable or binary files.
+
+
+🧠 Example Usage
+$ python search_word_in_files.py
+Enter word to search: function
+Enter directory path (default = current): ./project_folder
+
+
+Output:
+
+project_folder/app.py:12:def my_function():
+project_folder/utils/helpers.py:47:# helper function for sorting
+
+✅ Summary
+
+The Search Word in Files tool helps developers and writers instantly locate keywords across multiple files, improving productivity and simplifying project navigation. Perfect for searching codebases or large text directories efficiently.
