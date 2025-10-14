@@ -1,0 +1,22 @@
+def tip_calculator():
+    # Get user inputs
+    total_bill = float(input("Enter the total bill amount: $"))
+    tip_percentage = float(input("Enter the tip percentage (e.g., 15 for 15%): "))
+    num_people = int(input("Enter the number of people sharing the bill: "))
+
+    # Calculate tip amount and total amount
+    tip_amount = total_bill * (tip_percentage / 100)
+    total_amount = total_bill + tip_amount
+
+    # Calculate amount per person
+    amount_per_person = total_amount / num_people
+
+    # Display results
+    print(f"\n--- Tip Calculator Results ---")
+    print(f"Total Bill Amount: ${total_bill:.2f}")
+    print(f"Tip Amount: ${tip_amount:.2f}")
+    print(f"Total Amount (including tip): ${total_amount:.2f}")
+    print(f"Amount per person: ${amount_per_person:.2f}")
+
+# Run the calculator
+tip_calculator()
