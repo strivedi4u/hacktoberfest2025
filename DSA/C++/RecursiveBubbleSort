@@ -1,0 +1,29 @@
+#include<bits//stdc++.h>
+using namespace std;
+// to bubble sort you have to push max. element to the last by adjacent swapping 
+// for this you have to use recursion ...in order to do you have to call bubble_sort and pass size as (n-1) because in every step max. element of the remaining array get shifted to the last pos.and do not swap it again 
+void bubble_sort(int arr[], int n){
+    if (n==1) return ;
+    for(int j=0;j<=n-2;j++){
+        if(arr[j]> arr[j+1]){
+            int temp = arr[j];
+            arr[j] = arr[j+1];
+            arr[j+1] = temp;
+        }
+    }
+    bubble_sort(arr,n-1);
+}
+
+int main(){
+    int n;
+    cin >> n;
+    int arr[n];
+    for(int i = 0;i<n; i++)
+    cin >> arr[i];
+
+    bubble_sort(arr, n);
+
+    for(int i = 0 ;i< n; i++){
+        cout << arr[i]<< " ";
+    }
+}
