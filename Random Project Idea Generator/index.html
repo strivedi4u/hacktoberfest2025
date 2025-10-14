@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Project Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #project {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Random Project Generator</h1>
+    <button onclick="generateProject()">Generate Project Idea</button>
+    <p id="project"></p>
+</div>
+
+<script>
+    const projectIdeas = [
+        "Build a weather forecasting app",
+        "Create a personal portfolio website",
+        "Develop a chat application",
+        "Design a to-do list app with progress tracking",
+        "Build a recipe recommendation system",
+        "Create a fitness tracker with exercise history",
+        "Develop a blog platform with commenting system",
+        "Create a movie recommendation system",
+        "Build a virtual library to manage books",
+        "Design a quiz app with random questions"
+    ];
+
+    function generateProject() {
+        const randomIndex = Math.floor(Math.random() * projectIdeas.length);
+        const project = projectIdeas[randomIndex];
+        document.getElementById('project').innerText = `Your random project idea: ${project}`;
+    }
+</script>
+
+</body>
+</html>
