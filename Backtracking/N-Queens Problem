@@ -1,0 +1,34 @@
+def solve_n_queens(n):
+    def is_not_under_attack(row, col):
+        for r, c in enumerate(queens):
+            if c == col or abs(r - row) == abs(c - col):
+                return False
+        return True
+
+    def place_queen(row):
+        if row == n:
+            results.append(queens[:])
+            return
+        for col in range(n):
+            if is_not_under_attack(row, col):
+                queens[row] = col
+                place_queen(row + 1)
+
+    results = []
+    queens = [-1] * n  # Initialize the board
+    place_queen(0)
+    return results
+
+def print_solutions(solutions):
+    for solution in solutions:
+        for col in solution:
+            row = ['.'] * len(solution)
+            row[col] = 'Q'
+            print(' '.join(row))
+        print()
+
+# Example usage
+n = 4
+solutions = solve_n_queens(n)
+print(f"Total solutions for {n}-Queens: {len(solutions)}")
+print_solutions(solutions)
