@@ -1,0 +1,22 @@
+# Ignore virtual environment
+env/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
+
+# Ignore zip files
+*.zip
+
+# Ignore token and configuration files
+choose_your_own_adventure-token.json
+secure-connect-choose-your-own-adventure.zip
