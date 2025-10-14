@@ -1,0 +1,65 @@
+# Function to check if current minimum pages allocation is possible
+def is_possible(books, n, m, curr_min):
+    students = 1  # Start with one student
+    curr_sum = 0  # Current sum of pages allocated to a student
+    
+    for i in range(n):
+        # If a single book has more pages than curr_min, allocation is not possible
+        if books[i] > curr_min:
+            return False
+        
+        # Add pages to current student's allocation
+        if curr_sum + books[i] > curr_min:
+            # If the current sum exceeds curr_min, allocate to the next student
+            students += 1
+            curr_sum = books[i]  # Reset the sum for the next student
+            
+            # If students exceed the given limit, return False
+            if students > m:
+                return False
+        else:
+            curr_sum += books[i]
+    
+    return True
+
+# Function to find the minimum possible maximum pages allocation
+def allocate_books(books, n, m):
+    # If the number of books is less than students, allocation is not possible
+    if n < m:
+        return -1
+
+    # Calculate the total sum of pages and the maximum pages in a single book
+    total_pages = sum(books)
+    max_pages = max(books)
+    
+    # Binary search to find the minimum of the maximum number of pages
+    low = max_pages
+    high = total_pages
+    result = high
+    
+    while low <= high:
+        mid = (low + high) // 2
+
+        # Check if it is possible to allocate with mid as the maximum limit
+        if is_possible(books, n, m, mid):
+            result = mid  # Try to find a better (lower) maximum
+            high = mid - 1
+        else:
+            low = mid + 1
+    
+    return result
+
+# Example usage
+if __name__ == "__main__":
+    books = [12, 34, 67, 90]
+    n = len(books)
+    m = 2  # Number of students
+    
+    # Call the function to find the result
+    result = allocate_books(books, n, m)
+    
+    # Print the result
+    if result != -1:
+        print(f"The minimum of the maximum pages a student has to read is: {result}")
+    else:
+        print("Not enough books for each student.")
