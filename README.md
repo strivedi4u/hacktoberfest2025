@@ -5,16 +5,18 @@
 ![Hacktoberfest2025](https://github.com/user-attachments/assets/e1f0f8b0-146f-4c0b-9ee0-51cc9f0c99b4)
 
 <!-- ANIMATED TYPING EFFECT -->
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=FF6600&center=true&vCenter=true&multiline=true&width=800&height=100&lines=Welcome+to+Hacktoberfest+2025!;Elite+Code+%7C+Innovation+%7C+Excellence;Join+200%2B+Contributors+Worldwide!" alt="Typing SVG" />
-</p>
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=38&duration=2800&pause=2000&color=FF6600&center=true&vCenter=true&multiline=true&width=900&height=180&lines=Welcome+to+Hacktoberfest+2025!;Elite+Code+%7C+Innovation+%7C+Excellence;Join+200%2B+Contributors+Worldwide!" alt="Typing SVG" />
+</div>
 
-<!-- SNAKE ANIMATION -->
+---
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/platane/platane/output/github-contribution-grid-snake-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/platane/platane/output/github-contribution-grid-snake.svg">
   <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/platane/platane/output/github-contribution-grid-snake.svg">
 </picture>
+
 
 <!-- DYNAMIC BANNER -->
 ![](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Hacktoberfest%202025&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Build%20the%20Future%20Together&descAlignY=51&descAlign=50)
