@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SleepCircle 🌙</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>SleepCircle 🌙</h1>
+    <p class="subtitle">Track your bedtime and relax into better sleep</p>
+
+    <div class="input-section">
+      <label for="bedtime">Set your bedtime:</label>
+      <input type="time" id="bedtime">
+      <button id="setBtn">Set Goal</button>
+    </div>
+
+    <div class="circle-container">
+      <div class="circle">
+        <div id="progress"></div>
+      </div>
+      <p id="status">No bedtime set yet</p>
+    </div>
+
+    <div class="tip-section">
+      <h3>Sleep Tip:</h3>
+      <p id="tip">Good sleep improves memory, mood, and energy!</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
