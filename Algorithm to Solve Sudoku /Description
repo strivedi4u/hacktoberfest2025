@@ -1,0 +1,82 @@
+Sudoku Solver Using Backtracking 
+
+This Python program solves a 9×9 Sudoku puzzle using a backtracking algorithm, which is a type of recursion that tries numbers in empty cells and backtracks when a placement violates Sudoku rules.
+
+Note: The detailed implementation with step-by-step explanation, input/output examples, and time/space complexity is provided in Python.
+Implementations in other programming languages (C++, Java, C#, etc.) are included in the project as well, but without detailed explanations.
+
+
+
+What it does:
+
+Fills empty cells (denoted by 0) with numbers 1–9.
+
+Ensures that each number appears only once per row, column, and 3×3 subgrid.
+
+Prints both the original board and the solved board.
+
+
+
+How it works (Step by Step):
+
+Scan the board for empty cells.
+
+Try numbers 1–9 in the empty cell.
+
+Use a validation function to check row, column, and subgrid constraints.
+
+If a number is valid, move to the next empty cell (recursion).
+
+If no number works, backtrack and try a different number in the previous cell.
+
+
+
+Where it can be used:
+
+Learning recursion and backtracking in Python.
+
+Automatically solving Sudoku puzzles.
+
+Interview preparation for recursion/backtracking problems.
+
+Can be extended for other constraint satisfaction problems, like N-Queens.
+
+
+Complexity:
+
+Time Complexity: O(9^(N×N)) worst-case (N = 9, size of board)
+
+Space Complexity: O(N×N) for the board + recursion stack
+
+
+
+Example Input:
+board = [
+ [5,3,0,0,7,0,0,0,0],
+ [6,0,0,1,9,5,0,0,0],
+ [0,9,8,0,0,0,0,6,0],
+ [8,0,0,0,6,0,0,0,3],
+ [4,0,0,8,0,3,0,0,1],
+ [7,0,0,0,2,0,0,0,6],
+ [0,6,0,0,0,0,2,8,0],
+ [0,0,0,4,1,9,0,0,5],
+ [0,0,0,0,8,0,0,7,9]
+]
+
+Example Output:
+Solved Sudoku Board:
+[5,3,4,6,7,8,9,1,2]
+[6,7,2,1,9,5,3,4,8]
+[1,9,8,3,4,2,5,6,7]
+[8,5,9,7,6,1,4,2,3]
+[4,2,6,8,5,3,7,9,1]
+[7,1,3,9,2,4,8,5,6]
+[9,6,1,5,3,7,2,8,4]
+[2,8,7,4,1,9,6,3,5]
+[3,4,5,2,8,6,1,7,9]
+
+
+
+Summary:
+This program is a practical example of backtracking, useful for learning algorithms, automating Sudoku solving, and practicing recursive problem-solving.
+The Python version includes detailed explanations, input/output examples, and complexity analysis, while other languages like C++, Java, and C# are also provided for reference.

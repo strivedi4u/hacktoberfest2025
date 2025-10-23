@@ -1,0 +1,48 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class BirthdayInvitationCard extends JFrame {
+
+    public BirthdayInvitationCard() {
+        setTitle("Birthday Invitation");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the window
+
+        // Custom panel with overridden paintComponent
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                setBackground(new Color(255, 250, 240)); // Light background
+
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g.setFont(new Font("Serif", Font.BOLD, 26));
+                g.setColor(new Color(199, 21, 133)); // Deep pink
+                g.drawString("You're Invited!", 150, 50);
+
+                g.setFont(new Font("SansSerif", Font.PLAIN, 18));
+                g.setColor(Color.DARK_GRAY);
+                g.drawString("Join us to celebrate", 160, 90);
+                g.drawString("Sophia’s 10th Birthday!", 140, 120);
+
+                g.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                g.drawString("📅 Date: Saturday, Oct 28, 2025", 120, 170);
+                g.drawString("⏰ Time: 3:00 PM – 6:00 PM", 120, 200);
+                g.drawString("📍 Location: 123 Party Lane, Fun City", 120, 230);
+
+                g.drawString("RSVP by Oct 25th: 123-456-7890", 120, 270);
+                g.drawString("Come hungry & ready to party! 🎉", 120, 310);
+            }
+        };
+
+        add(panel);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new BirthdayInvitationCard().setVisible(true);
+        });
+    }
+}
